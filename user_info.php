@@ -1,14 +1,17 @@
 <?php
+//セッションチェック
 session_start();
 if (!empty($_GET['user_id'])) {
+	//DB接続
 	try {
-		$dbh = new PDO('mysql:host=localhost;dbname=procir_TAKEDA379;charset=utf8', 'TAKEDA379', '4p3kik4ggx');
+		$dbh = new PDO('mysql:host=localhost;dbname=xxxxx;charset=utf8', 'xxxxx', 'xxxxx');
 	} catch (PDOExeption $e) {
 		echo '接続エラー' . $e->getMessage();
 		exit;
 	}
 	$user_id = $_GET['user_id'];
 
+	//ユーザー情報取得処理
 	$sql = 'SELECT * FROM users WHERE id = :id';
 	$stmt = $dbh->prepare($sql);
 	$stmt->bindValue(':id', $user_id);

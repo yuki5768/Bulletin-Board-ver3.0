@@ -1,12 +1,17 @@
 <?php
+//セッションチェック
 session_start();
 if (!isset($_SESSION['id']) && !isset($_SESSION['name'])) {
 	header('Location: display_post.php');
 }
+
+//ユーザー確認
 if (isset($_GET['post_id'])) {
 	$post_id = $_GET['post_id'];
+
+	//DB接続
 	try {
-		$dbh = new PDO('mysql:host=localhost;dbname=procir_TAKEDA379;charset=utf8', 'TAKEDA379', '4p3kik4ggx');
+		$dbh = new PDO('mysql:host=localhost;dbname=xxxxx;charset=utf8', 'xxxxx', 'xxxxx');
 	} catch (PDOExeption $e) {
 		echo '接続エラー' . $e->getMessage();
 		exit;
@@ -16,6 +21,8 @@ if (isset($_GET['post_id'])) {
 	$stmt1->bindValue(':id', $post_id);
 	$stmt1->execute();
 	$result = $stmt1->fetch();
+
+	//投稿削除処理
 	if ($result['user_id'] == $_SESSION['id']) {
 		$sql2 = 'UPDATE posts SET deleted_flag = 1 WHERE id = :id';
 		$stmt2 = $dbh->prepare($sql2);
@@ -28,6 +35,7 @@ if (isset($_GET['post_id'])) {
 } else {
 	header('Location: display_post.php');
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">

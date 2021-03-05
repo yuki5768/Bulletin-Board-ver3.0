@@ -1,7 +1,9 @@
 <?php
+//未入力確認
 if (!empty($_POST['mail'])) {
+	//DB接続
 	try {
-		$dbh = new PDO('mysql:host=localhost;dbname=procir_TAKEDA379;charset=utf8', 'TAKEDA379', '4p3kik4ggx');
+		$dbh = new PDO('mysql:host=localhost;dbname=xxxxx;charset=utf8', 'xxxxx', 'xxxxx');
 	} catch (PDOExeption $e) {
 		echo '接続エラー' . $e->getMessage();
 		exit;
@@ -11,7 +13,10 @@ if (!empty($_POST['mail'])) {
 	$stmt1->bindValue(':mail', $_POST['mail']);
 	$stmt1->execute();
 	$result = $stmt1->fetch();
+
+	//メールアドレスチェック
 	if (!empty($result) && $result['mail'] == $_POST['mail']) {
+		//パスワード再設定用メール
 		$token = rand(0, 100) . uniqid();
 		$url = $_SERVER['HTTP_REFERER'] . "?key=" . $token;
 		mb_language("Japanese");
@@ -20,8 +25,8 @@ if (!empty($_POST['mail'])) {
 		$subject = 'パスワード再設定フォーム';
 		$message = 'パスワードを再設定するには、以下のアドレスを開いてください。/このURLの有効期限は30分間です。/';
 		$message .= $url . "\n\n";
-		$headers = 'From: yuuki9978@outlook.jp' . "\r\n";
-		mb_send_mail($to, $subject, $message, $headers, '-f' . 'yuuki9978@outlook.jp');
+		$headers = 'From: xxxxx@xx.jp' . "\r\n";
+		mb_send_mail($to, $subject, $message, $headers, '-f' . 'xxxxx@xx.jp');
 		$sql2 = 'INSERT INTO pass_reset(user_id, reset_date, reset_token) VALUES (:user_id, now(), :reset_token)';
 		$stmt2 = $dbh->prepare($sql2);
 		$stmt2->bindValue(':user_id', $result['id']);

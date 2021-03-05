@@ -1,7 +1,10 @@
 <?php
+//セッションチェック
 session_start();
+
+//DB接続
 try {
-	$dbh = new PDO('mysql:host=localhost;dbname=procir_TAKEDA379;charset=utf8', 'TAKEDA379', '4p3kik4ggx');
+	$dbh = new PDO('mysql:host=localhost;dbname=xxxxx;charset=utf8', 'xxxxx', 'xxxxx');
 } catch (PDOExeption $e) {
 	echo '接続エラー' . $e->getMessage();
 	exit;
@@ -36,6 +39,7 @@ function escape($s) {
 <th>本文</th>
 <th>投稿日時</th>
 </tr>
+<!- 投稿一覧表示 ->
 <?php foreach ($result as $post): ?>
 <?php if (isset($_SESSION['id']) && isset($_SESSION['name'])): ?>
 <tr>

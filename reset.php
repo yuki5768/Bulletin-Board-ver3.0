@@ -1,12 +1,15 @@
 <?php
+//keyチェック
 if (isset($_GET['key'])) {
 	$key = $_GET['key'];
+	//DB接続
 	try {
-		$dbh = new PDO('mysql:host=localhost;dbname=procir_TAKEDA379;charset=utf8', 'TAKEDA379', '4p3kik4ggx');
+		$dbh = new PDO('mysql:host=localhost;dbname=xxxxx;charset=utf8', 'xxxxx', 'xxxxx');
 	} catch (PDOExeption $e) {
 		echo '接続エラー' . $e->getMessage();
 		exit;
 	}
+	//トークンチェック
 	$sql = 'SELECT * FROM pass_reset WHERE reset_token = :token';
 	$stmt = $dbh->prepare($sql);
 	$stmt->bindValue(':token', $key);

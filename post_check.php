@@ -1,15 +1,18 @@
 <?php
+//セッションチェック
 session_start();
 if (!isset($_SESSION['id']) && !isset($_SESSION['name'])) {
 	header('Location: display_post.php');
 }
+//未入力確認
 if (!empty($_POST['title']) && !empty($_POST['body'])) {
 	try {
-		$dbh = new PDO('mysql:host=localhost;dbname=procir_TAKEDA379;charset=utf8', 'TAKEDA379', '4p3kik4ggx');
+		$dbh = new PDO('mysql:host=localhost;dbname=xxxxx;charset=utf8', 'xxxxx', 'xxxxx');
 	} catch (PDOExeption $e) {
 		echo '接続エラー' . $e->getMessage();
 		exit;
 	}
+	//DBに投稿登録
 	$sql = 'INSERT INTO posts(user_id, post_date, title, body, deleted_flag) VALUES(:user_id, now(), :title, :body, 0)';
 	$stmt = $dbh->prepare($sql);
 	$stmt->bindValue(':user_id', $_SESSION['id']);

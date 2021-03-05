@@ -1,4 +1,5 @@
 <?php
+//セッションチェック
 session_start();
 ?>
 <!DOCTYPE html>

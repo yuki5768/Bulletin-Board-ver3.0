@@ -1,8 +1,10 @@
 <?php
+//keyチェック
 if (isset($_GET['key'])) {
 	$key = $_GET['key'];
+	//DB接続
 	try {
-		$dbh = new PDO('mysql:host=localhost;dbname=procir_TAKEDA379;charset=utf8', 'TAKEDA379', '4p3kik4ggx');
+		$dbh = new PDO('mysql:host=localhost;dbname=xxxxx;charset=utf8', 'xxxxx', 'xxxxx');
 	} catch (PDOExeption $e) {
 		echo '接続エラー' . $e->getMessage();
 		exit;
@@ -12,8 +14,11 @@ if (isset($_GET['key'])) {
 	$stmt1->bindValue(':reset_token', $key);
 	$stmt1->execute();
 	$result1 = $stmt1->fetch();
+	//keyチェック＆タイムアウトかどうかの確認
 	if ($result1['reset_token'] == $key && date('Y-m-d H:i:s', strtotime('-30 minute')) <= $result1['reset_date']) {
+		//パスワードチェック
 		if (!empty($_POST['pass']) && preg_match('/\A(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{8,100}+\z/', $_POST['pass'])) {
+			//パスワード更新
 			$pass = $_POST['pass'];
 			$sql2 = 'UPDATE users SET pass = :pass WHERE id = :id';
 			$stmt2 = $dbh->prepare($sql2);
@@ -21,6 +26,7 @@ if (isset($_GET['key'])) {
 			$stmt2->bindValue(':id', $result1['user_id']);
 			$stmt2->execute();
 
+			//Dbのパスワードリセット情報削除
 			$sql3 = 'DELETE FROM pass_reset WHERE reset_date <= :reset_date OR user_id = :user_id';
 			$stmt3 = $dbh->prepare($sql3);
 			$stmt3->bindValue(':reset_date', date('Y-m-d H:i:s', strtotime('-30 minute')));

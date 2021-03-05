@@ -1,4 +1,5 @@
 <?php
+//セッションチェック
 session_start();
 
 if (isset($_SESSION['id']) && isset($_SESSION['name'])) {
@@ -6,15 +7,20 @@ if (isset($_SESSION['id']) && isset($_SESSION['name'])) {
 	exit();
 }
 
+//未入力確認
 if (!empty($_POST['name']) && !empty($_POST['mail']) && !empty($_POST['pass'])) {
+	//メールアドレスチェック
 	if (preg_match('/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/', $_POST['mail'])) {
+		//パスワードチェック
 		if (preg_match('/\A(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{8,100}+\z/', $_POST['pass'])) {
+			//DB接続
 			try {
-				$dbh = new PDO('mysql:host=localhost;dbname=procir_TAKEDA379;charset=utf8', 'TAKEDA379', '4p3kik4ggx');
+				$dbh = new PDO('mysql:host=localhost;dbname=xxxxx;charset=utf8', 'xxxxx', 'xxxxx');
 			} catch (PDOExeption $e) {
 				echo '接続エラー' . $e->getMessage();
 				exit;
 			}
+			//メールアドレスの被りチェック
 			$sql1 = 'SELECT * FROM users WHERE mail = :mail';
 			$stmt1 = $dbh->prepare($sql1);
 			$stmt1->bindParam(':mail', $_POST['mail'], PDO::PARAM_STR);
@@ -23,6 +29,7 @@ if (!empty($_POST['name']) && !empty($_POST['mail']) && !empty($_POST['pass'])) 
 			if ($result) {
 				$answer = '同じメールアドレスは登録できません。';
 			} else {
+				//ユーザー登録
 				$sql2 = 'INSERT INTO users(name, mail, pass) VALUES (:name, :mail, :pass)';
 				$stmt2 = $dbh->prepare($sql2);
 				$stmt2->bindParam(':name', $_POST['name'], PDO::PARAM_STR);

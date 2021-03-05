@@ -1,16 +1,20 @@
 <?php
+//セッションチェック
 session_start();
 if (!isset($_SESSION['id']) && !isset($_SESSION['name'])) {
 	header('Location: display_post.php');
 }
+
+//DB接続
 if (isset($_GET['post_id'])) {
 	$post_id = $_GET['post_id'];
 	try {
-		$dbh = new PDO('mysql:host=localhost;dbname=procir_TAKEDA379;charset=utf8', 'TAKEDA379', '4p3kik4ggx');
+		$dbh = new PDO('mysql:host=localhost;dbname=xxxxx;charset=utf8', 'xxxxx', 'xxxxx');
 	} catch (PDOExeption $e) {
 		echo '接続エラー' . $e->getMessage();
 		exit;
 	}
+	//ユーザーIDチェック
 	$sql = 'SELECT * FROM posts WHERE id = :id';
 	$stmt = $dbh->prepare($sql);
 	$stmt->bindValue(':id', $post_id);
